@@ -1,6 +1,6 @@
 const puzzles = [
   { fen: "6k1/5ppp/8/8/8/8/5PPP/6K1 w - - 0 1" },
-  { fen: "8/8/8/8/8/2k5/3p4/2K5 w - - 0 1" },
+  { fen: "8/8/8/8/8/2k5/3p4/2K5 w - - 0 1" }
 ];
 let current = 0;
 const game = new Chess();
