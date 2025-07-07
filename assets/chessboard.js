@@ -46,7 +46,7 @@
             const square = container.querySelector(`[data-square="${files[col]}${8 - r}"]`);
             const piece = document.createElement('img');
             const color = ch === ch.toUpperCase() ? 'w' : 'b';
-            piece.src = `https://chessboardjs.com/img/chesspieces/wikipedia/${color}${ch.toLowerCase()}.png`;
+            piece.src = `https://cdn.jsdelivr.net/npm/@chrisoakman/chessboardjs@1.0.0/img/chesspieces/wikipedia/${color}${ch.toLowerCase()}.png`;
             piece.draggable = draggable;
             piece.className = 'piece';
             square.appendChild(piece);
