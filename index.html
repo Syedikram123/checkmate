@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome to Chess Arena</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to <span>Chess Arena</span></h1>
+    
+    <div class="menu">
+      <button onclick="location.href='you-vs-bot.html'">1. You vs Bot</button>
+      <button onclick="location.href='two-player.html'">2. 2 Player Match</button>
+      <button onclick="location.href='puzzle-mode.html'">3. Puzzle Mode</button>
+      <button onclick="toggleTheme()">4. Toggle Light/Dark Mode</button>
+    </div>
+  </div>
+
+  <script>
+    // Theme toggle
+    function toggleTheme() {
+      document.body.classList.toggle("dark-mode");
+    }
+  </script>
+</body>
+</html>

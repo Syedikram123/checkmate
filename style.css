@@ -1,0 +1,55 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f3f3f3;
+  color: #222;
+  transition: background 0.4s, color 0.4s;
+}
+
+.container {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 40px;
+}
+
+h1 span {
+  color: #0077ff;
+}
+
+.menu button {
+  display: block;
+  margin: 15px auto;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  background-color: #0077ff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 250px;
+  transition: 0.3s ease;
+}
+
+.menu button:hover {
+  background-color: #0055bb;
+}
+
+/* Dark mode */
+.dark-mode {
+  background-color: #121212;
+  color: #f1f1f1;
+}
+
+.dark-mode .menu button {
+  background-color: #444;
+  color: white;
+}
+
+.dark-mode .menu button:hover {
+  background-color: #666;
+}

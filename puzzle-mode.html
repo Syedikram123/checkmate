@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Puzzle Mode | Chess Arena</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="assets/chess.js"></script>
+  <script src="assets/chessboard.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
+  <style>
+    #board {
+      width: 400px;
+      margin: 20px auto;
+    }
+    #status, #controls {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.1rem;
+    }
+    #controls button {
+      margin: 5px;
+      padding: 8px 20px;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Puzzle Mode</h1>
+    <div id="board"></div>
+    <div id="status">Solve the puzzle!</div>
+
+    <div id="controls">
+      <button onclick="loadPuzzle(0)">1-Move Win</button>
+      <button onclick="loadPuzzle(1)">2-Move Win</button>
+      <button onclick="location.href='index.html'">← Back to Home</button>
+    </div>
+  </div>
+
+  <script>
+    const boardEl = document.getElementById('board');
+    const statusEl = document.getElementById('status');
+    const puzzles = [
+      {
+        fen: "6k1/5ppp/8/8/8/8/5PPP/6K1 w - - 0 1", // Simple 1-move mate: White plays f2-f3 or king to f1
+        solution: "g2g3" // Just for example
+      },
+      {
+        fen: "r1bq1rk1/ppp2ppp/2nb1n2/3pp3/3PP3/2PB1N2/PP3PPP/RNBQ1RK1 w - - 0 1",
+        solution: "d4e5" // 2-move attack start
+      }
+    ];
+
+    let game = new Chess();
+    let board;
+
+    function loadPuzzle(index) {
+      const puzzle = puzzles[index];
+      game.load(puzzle.fen);
+      board.position(puzzle.fen);
+      statusEl.textContent = "Your move to win!";
+    }
+
+    board = Chessboard('board', {
+      draggable: true,
+      position: 'start',
+      onDrop: function(source, target) {
+        const move = game.move({
+          from: source,
+          to: target,
+          promotion: 'q'
+        });
+
+        if (!move) return 'snapback';
+
+        const currentFen = game.fen();
+        // For simplicity, just say "Puzzle solved!" if checkmate
+        if (game.in_checkmate()) {
+          statusEl.textContent = "✅ Puzzle Solved! Checkmate!";
+        } else {
+          statusEl.textContent = "❌ Not checkmate yet. Try again.";
+        }
+      }
+    });
+
+    // Load default puzzle
+    loadPuzzle(0);
+  </script>
+</body>
+</html>
