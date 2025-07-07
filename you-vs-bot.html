@@ -1,70 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>You vs Bot | Chess Arena</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
-  <script src="assets/chess.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.12.0/chess.min.js"></script>
   <script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/stockfish@16/stockfish.min.js"></script>
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
     #board {
       width: 400px;
       margin: 20px auto;
     }
+
     #status {
-      text-align: center;
-      margin-top: 20px;
       font-size: 1.2rem;
+      margin-top: 15px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 8px 20px;
+      font-size: 1rem;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>You vs Bot</h1>
-    <div id="board"></div>
-    <div id="status">White to move</div>
-    <button onclick="location.href='index.html'">← Back to Home</button>
-  </div>
+  <h1>You vs Bot</h1>
+  <div id="board"></div>
+  <div id="status">White to move</div>
+  <button onclick="location.href='index.html'">← Back to Home</button>
 
   <script>
-    const boardEl = document.getElementById('board');
-    const statusEl = document.getElementById('status');
     const game = new Chess();
-    const stockfish = new Worker('assets/stockfish.js');
+    const stockfish = new Worker("https://cdn.jsdelivr.net/npm/stockfish@16/stockfish.min.js");
 
-    let board = Chessboard('board', {
-      draggable: true,
-      position: 'start',
-      onDrop: onDrop,
-    });
+    let board;
+
+    window.onload = function () {
+      board = Chessboard('board', {
+        draggable: true,
+        position: 'start',
+        onDrop: onDrop
+      });
+    };
 
     function onDrop(source, target) {
       const move = game.move({
         from: source,
         to: target,
-        promotion: 'q'
+        promotion: 'q' // always promote to queen for simplicity
       });
 
       if (!move) return 'snapback';
 
       updateStatus();
-      window.setTimeout(makeBestMove, 250);
+      setTimeout(makeBestMove, 300);
     }
 
     function makeBestMove() {
-      stockfish.postMessage('position fen ' + game.fen());
-      stockfish.postMessage('go depth 15');
+      stockfish.postMessage("position fen " + game.fen());
+      stockfish.postMessage("go depth 15");
 
       stockfish.onmessage = function (event) {
         const line = event.data;
-        if (line.startsWith('bestmove')) {
-          const move = line.split(' ')[1];
+        if (line.startsWith("bestmove")) {
+          const move = line.split(" ")[1];
           if (!move || move.length < 4) return;
           const from = move.substring(0, 2);
           const to = move.substring(2, 4);
-          const moveObj = game.move({ from, to, promotion: 'q' });
+          game.move({ from: from, to: to, promotion: 'q' });
           board.position(game.fen());
           updateStatus();
         }
@@ -73,16 +92,15 @@
 
     function updateStatus() {
       let status = '';
-
       if (game.in_checkmate()) {
-        status = 'Checkmate! ' + (game.turn() === 'w' ? 'Black' : 'White') + ' wins.';
+        status = '✅ Checkmate! ' + (game.turn() === 'w' ? 'Black' : 'White') + ' wins.';
       } else if (game.in_draw()) {
-        status = 'Draw!';
+        status = '🤝 Draw!';
       } else {
         status = (game.turn() === 'w' ? 'White' : 'Black') + ' to move.';
       }
 
-      statusEl.innerHTML = status;
+      document.getElementById("status").innerText = status;
     }
   </script>
 </body>
